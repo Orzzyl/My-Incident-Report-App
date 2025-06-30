@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incident Report App - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            height: 70px;
+            color: white;
+            border-radius: 5px;
+            padding: 0 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .app-name {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        #logoutBtn {
+            background-color: #fff;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .hero {
+            width: 100%;
+            background: #d1d1d1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0 20px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .edit-profile {
+            font-weight: 500;
+            color: #000;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .profile-icon {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover;
+            background: #eee;
+        }
+        label[for="profilePictureInput"] {
+            display: block;
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        #profilePictureInput {
+            display: none;
+        }
+        .question {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 2rem;
+            color: #333;
+            font-weight: 500;
+        }
+        .choices-container {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: row;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .report-option-container,
+        .post-option-container,
+        .incident-book-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            margin: 10px auto;
+            max-width: 350px;
+            min-width: 250px;
+            min-height: 260px;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .report-option-container:hover,
+        .post-option-container:hover,
+        .incident-book-container:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .report-option, .post-option, .incident-book-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .button-1, .button-2, .button-3 {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 15px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        .button-1:hover, .button-2:hover, .button-3:hover {
+            background-color: #555;
+        }
+        /* Slideshow styles */
+        .overall-slideshow-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            padding-bottom: 20px; 
+        }
+        .slideshow-container {
+            position: relative;
+            max-width: 900px;         
+            min-height: 420px;        
+            margin: 40px auto 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .slide {
+            display: none;
+            padding: 60px 40px 60px 40px; 
+            text-align: center;
+            min-height: 320px;           
+            color: white;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .slide.active {
+            display: block;
+            opacity: 1;
+            animation: slideIn 0.8s ease-out;
+        }
+        .slide h2 {
+            margin-top: 0;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .slide p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .slide-1 { background: #003B46}
+        .slide-2 { background: #07575B}
+        .slide-3 { background: #61A4AD}
+        .slide-4 { background: #023E49}
+        .slide-5 { background: #0A5B71;}
+        .slide-6 { background: #0A566D}
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .slide.active .progress-bar {
+            width: 100%;
+        }
+        .indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transition: background 0.3s;
+        }
+        .indicator.active {
+            background: rgba(255,255,255,1);
+        }
+        .title-section {
+            text-align: center;
+            margin: 100px 0 10px 0;
+        }
+        .title-section h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .title-section p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+
+
+
+        @media (max-width: 768px) {
+          .app-name {
+                font-size: 0.8rem;
+            }
+            #logoutBtn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+            .hero {
+                padding: 15px 0;
+            }
+            .edit-profile {
+                font-size: 1rem;
+            }
+            label [for="profilePictureInput"] {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+            .greetings {
+                font-size: 1rem;
+            }
+            .question {
+                font-size: 1rem;
+                font-weight: bold;
+            }
+            .choices-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .report-option-container,
+            .post-option-container,
+            .incident-book-container {
+                max-width: 100%;
+                width: 90%;
+            }
+            .hero {
+                padding: 20px 0;
+            }
+            .profile-icon {
+                width: 150px;
+                height: 150px;
+            }
+            .overall-slideshow-container {
+                padding-bottom: 0; 
+            }
+            .title-section h1{
+              font-size: 1.2rem
+            }
+            .title-section p {
+                font-size: 0.9rem;
+            }
+            .slide h2{
+              font-size: 1.5rem;
+            }
+            .slide p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="app-name">Incident App</h1>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+    </div>
+
+    <div class="hero">
+        <h1 class="edit-profile">Profile Picture</h1>
+        <img src="profile.png" alt="Profile Picture" class="profile-icon" id="profilePictureImage" />
+        <label for="profilePictureInput">Edit Profile Picture</label>
+        <input type="file" accept="image/jpeg, image/png, image/jpg" id="profilePictureInput" />
+        <h2 class="greetings">Welcome, <span id="username"></span></h2>
+    </div>
+
+    <div class="question">
+        <p>What would you like to do?</p>
+    </div>
+
+    <section class="choices-container">
+        <div class="report-option-container">
+            <div class="report-option">
+                <p>Report something? Click here to document incidents, safety issues, or concerns so we can address them promptly.</p>
+                <button type="button" class="button-1" id="reportOption">Report Incident</button>
+            </div>
+        </div>
+        <div class="post-option-container">
+            <div class="post-option post-option-1">
+                <p>We're here to support you. Please share what happened; your report helps us learn, improve, and keep everyone safe.</p>
+                <button type="button" class="button-2" id="postOption">Post Incident</button>
+            </div>
+        </div>
+        <div class="incident-book-container">
+            <div class="incident-book-option incident-book">
+                <p>Do you want to see your post? Click on the button to view your recent posts.</p>
+                <button type="button" class="button-3" id="incidentbookOption">Incident Book</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="title-section">
+        <h1>Information</h1>
+        <p>Important safety information</p>
+    </div>
+
+    <section class="overall-slideshow-container">
+    <div class="slideshow-container">
+        <div class="slide active slide-1">
+            <h2>Safety First</h2>
+            <p>Welcome to our incident reporting system. Your safety and the safety of others is our top priority.</p>
+            <p>This information will help you understand how to report incidents effectively.</p>
+        </div>
+        <div class="slide slide-2">
+            <h2>What to Report?</h2>
+            <p>Report any accidents, injuries, near-misses, safety hazards, various forms of incident.</p>
+            <p>No incident is too small - early reporting helps prevent bigger problems.</p>
+        </div>
+        <div class="slide slide-3">
+            <h2>When to Report?</h2>
+            <p>Report incidents immediately or as soon as it's safe to do so.</p>
+            <p>Quick reporting ensures accurate details and faster response times.</p>
+        </div>
+        <div class="slide slide-4">
+            <h2>Confidentiality</h2>
+            <p>All incident reports are handled confidentially and professionally.</p>
+            <p>Your report helps us improve safety for everyone in the workplace.</p>
+           
+        </div>
+        <div class="slide slide-5">
+            <h2>Be Specific</h2>
+            <p>Include date, time, location, what happened, and who was involved.</p>
+            <p>Clear details help us understand and address the situation properly.</p>
+        </div>
+        <div class="slide slide-6">
+            <h2>Ready to Report or make a post?</h2>
+            <p>your choice from above, you can make a post or make a report.</p>
+            <p>Thank you for helping us maintain a safe workplace for everyone.</p>
+        </div>
+        <div class="indicators">
+            <div class="indicator active"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+        </div>
+    </div>
+</section>
+   
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>

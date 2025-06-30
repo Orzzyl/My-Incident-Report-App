@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Incident App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "poppins", sans-serif;
+        min-height: 100vh;
+        background: #f8f9fa;
+      }
+
+      .first-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            height: 70px;
+            color: white;
+            border-radius: 5px;
+            padding: 0 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .app-name {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        #logoutBtn {
+            background-color: #fff;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+      .overall-post-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .header {
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        text-align: center;
+        width: 100%;
+        background: white;
+      }
+      .header h1 {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      .header p {
+        color: #555;
+        font-size: 0.8rem;
+      }
+      .form-container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        width: 50%;
+        margin-bottom: 30px;
+      }
+      .form-container h2 {
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 30px;
+      }
+      .form-group input[type="text"],
+      .form-group input[type="date"],
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        transition: border-color 0.3s;
+        font-family: inherit;
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+      .form-group textarea {
+        resize: none;
+        height: 200px;
+      }
+      label {
+        font-size: 0.9rem;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+      }
+      .upload-section {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+      }
+      .upload-section button {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .upload-section input[type="file"] {
+        display: none;
+      }
+      .takephoto-btn {
+        padding: 12px 20px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .upload-btn:hover,
+      .takephoto-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+      .upload-btn:active,
+      .takephoto-btn:active {
+        transform: translateY(0);
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+        gap: 20px;
+        align-items: center;
+        flex-direction: row;
+      }
+      .cancel-button,
+      .submit-button {
+        border: none;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: black;
+        color: white;
+        min-width: 100px;
+      }
+
+      .cancel-button:hover,
+      .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+      .cancel-button:active,
+      .submit-button:active {
+        transform: translateY(0);
+      }
+
+      /* Posts Section Styles */
+      .posts-section {
+        width: 100%;
+        max-width: 800px;
+        margin-top: 40px;
+      }
+
+      .posts-section h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+      }
+
+      .post-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .post-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .post-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .post-meta {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        color: #666;
+        font-size: 0.85rem;
+      }
+
+      .post-category {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+
+      .post-content {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+      }
+
+      .post-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+
+      .post-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #e1e5e9;
+      }
+
+      .like-section {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .like-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+      }
+
+      .like-btn:hover {
+        background: #f8f9fa;
+      }
+
+      .like-btn.liked {
+        color: #e74c3c;
+        background: #ffeaea;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .edit-btn,
+      .delete-btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+      }
+
+      .edit-btn {
+        background: #007bff;
+        color: white;
+      }
+
+      .delete-btn {
+        background: #dc3545;
+        color: white;
+      }
+
+      .edit-btn:hover,
+      .delete-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .no-posts {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 40px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      }
+
+      .file-preview {
+        margin-top: 15px;
+      }
+
+      .file-preview img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .file-preview button {
+        margin-top: 10px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 6px 16px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        display: block;
+      }
+
+      .file-preview button:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+      }
+
+      .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #c3e6cb;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #f5c6cb;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      @media screen and (max-width: 1200px) {
+        .form-container {
+          width: 70%;
+        }
+      }
+
+      @media screen and (max-width: 768px) {
+        .app-name {
+                font-size: 0.8rem;
+            }
+            #logoutBtn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+        .form-container {
+          width: 90%;
+          padding: 30px 20px;
+        }
+        
+        .posts-section {
+          width: 90%;
+        }
+        
+        .post-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        
+        .post-actions {
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .action-buttons {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media screen and (max-width: 500px) {
+        .header h1 {
+          font-size: 1.2rem;
+        }
+        .header p {
+          font-size: 0.75rem;
+        }
+        .form-container h2 {
+          font-size: 1.2rem;
+        }
+        .submit-button,
+        .cancel-button {
+          min-width: 80px;
+          font-size: 0.8rem;
+          padding: 10px 16px;
+        }
+        .upload-section {
+          flex-direction: row;
+          align-items: center;
+        }
+        .upload-section button {
+          width: 100%;
+        }
+        .image-span{
+          display: none;
+        }
+      }
+      @media screen and (max-width: 370px){
+        .span{
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+     <div class="first-header">
+        <h1 class="app-name">Incident App</h1>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+    </div>
+    <section class="overall-post-container">
+      <div class="header">
+        <h1>Welcome to your Incident Posting Portal</h1>
+        <p>
+          Share your incidents, thoughts, and experiences with the community.
+        </p>
+      </div>
+
+      <div class="form-container">
+        <div id="message-container"></div>
+        <h2 id="form-title">Make a Post</h2>
+        <form id="post-form" autocomplete="off">
+          <input type="hidden" id="edit-id" name="edit-id" />
+
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Enter your post title..."
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="accident">Accident</option>
+              <option value="rioting">Rioting</option>
+              <option value="murder">Murder</option>
+              <option value="fighting">Fighting</option>
+              <option value="damage">Damage</option>
+              <option value="assault">Assault</option>
+              <option value="kidnapping">Kidnapping</option>
+              <option value="rape">Rape</option>
+              <option value="fire">Fire</option>
+              <option value="fall">Fall</option>
+              <option value="robbery">Robbery</option>
+              <option value="suicide">Suicide</option>
+              <option value="arms">Arms</option>
+              <option value="stalking">Stalking</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="content">Content</label>
+            <textarea
+              id="content"
+              name="content"
+              placeholder="Share your thoughts..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="uploadImages">Upload Images</label>
+
+            <div class="upload-section">
+              <button
+                type="button"
+                class="upload-btn"
+                onclick="document.getElementById('basicFile').click()"
+              >
+                Upload <span class="image-span">Image</span> 
+              </button>
+              <input
+                type="file"
+                id="basicFile"
+                class="hidden-input"
+                onchange="handleBasicUpload(event)"
+                accept="image/*"
+                title="Upload an image file"
+                placeholder="Choose an image file"
+              />
+
+              <button type="button" id="takePhoto_btn" class="takephoto-btn">
+                <span class="span">Take</span> Photo
+              </button>
+            </div>
+
+            <div id="basicPreview" class="file-preview"></div>
+          </div>
+
+          <div class="button-container">
+            <button type="submit" class="submit-button" id="submit-btn">
+              Post
+            </button>
+            <button type="button" class="cancel-button" id="cancel-btn">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Posts Display Section -->
+      <div class="posts-section">
+        <h2>Recent Posts</h2>
+        <div id="posts-container">
+          <div class="no-posts">No posts yet. Be the first to share an incident!</div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+
+//log out functionality
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+      // Global variables
+      let currentImageDataUrl = null;
+      let posts = [];
+      let editingPostId = null;
+      let postIdCounter = 1;
+
+      // DOM elements
+      const postForm = document.getElementById('post-form');
+      const postsContainer = document.getElementById('posts-container');
+      const formTitle = document.getElementById('form-title');
+      const submitBtn = document.getElementById('submit-btn');
+      const cancelBtn = document.getElementById('cancel-btn');
+      const messageContainer = document.getElementById('message-container');
+
+      // Set today's date as default
+      document.getElementById('date').valueAsDate = new Date();
+
+      // Show message function
+      function showMessage(message, type = 'success') {
+        messageContainer.innerHTML = `<div class="${type}-message">${message}</div>`;
+        setTimeout(() => {
+          messageContainer.innerHTML = '';
+        }, 3000);
+      }
+
+      // Image upload and preview
+      function handleBasicUpload(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById("basicPreview");
+        preview.innerHTML = "";
+        currentImageDataUrl = null;
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.style.maxWidth = "100%";
+            img.style.borderRadius = "8px";
+            currentImageDataUrl = e.target.result;
+
+            // Create delete button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = function () {
+              preview.innerHTML = "";
+              document.getElementById("basicFile").value = "";
+              currentImageDataUrl = null;
+            };
+
+            preview.appendChild(img);
+            preview.appendChild(deleteBtn);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      // Take Photo functionality
+      document.getElementById("takePhoto_btn").addEventListener("click", async function () {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showMessage("Camera access is not supported in this browser.", 'error');
+          return;
+        }
+
+        const video = document.createElement("video");
+        video.autoplay = true;
+        video.style.width = "100%";
+        video.style.borderRadius = "8px";
+        const preview = document.getElementById("basicPreview");
+        preview.innerHTML = "";
+        preview.appendChild(video);
+
+        const captureBtn = document.createElement("button");
+        captureBtn.textContent = "Capture";
+        captureBtn.style.marginTop = "10px";
+        captureBtn.style.background = "black";
+        captureBtn.style.color = "white";
+        captureBtn.style.border = "none";
+        captureBtn.style.borderRadius = "20px";
+        captureBtn.style.padding = "6px 16px";
+        captureBtn.style.cursor = "pointer";
+
+        const cancelVideoBtn = document.createElement("button");
+        cancelVideoBtn.textContent = "Cancel";
+        cancelVideoBtn.style.marginTop = "10px";
+        cancelVideoBtn.style.marginLeft = "10px";
+        cancelVideoBtn.style.background = "#dc3545";
+        cancelVideoBtn.style.color = "white";
+        cancelVideoBtn.style.border = "none";
+        cancelVideoBtn.style.borderRadius = "20px";
+        cancelVideoBtn.style.padding = "6px 16px";
+        cancelVideoBtn.style.cursor = "pointer";
+
+        preview.appendChild(captureBtn);
+        preview.appendChild(cancelVideoBtn);
+
+        let stream = null;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+        } catch (err) {
+          preview.innerHTML = "";
+          showMessage("Could not access the camera.", 'error');
+          return;
+        }
+
+        captureBtn.onclick = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          stream.getTracks().forEach((track) => track.stop());
+
+          const img = document.createElement("img");
+          img.src = canvas.toDataURL("image/png");
+          img.style.maxWidth = "100%";
+          img.style.borderRadius = "8px";
+          currentImageDataUrl = img.src;
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "Delete";
+          deleteBtn.onclick = function () {
+            preview.innerHTML = "";
+            currentImageDataUrl = null;
+          };
+
+          preview.innerHTML = "";
+          preview.appendChild(img);
+          preview.appendChild(deleteBtn);
+        };
+
+        cancelVideoBtn.onclick = function () {
+          if (stream) {
+            stream.getTracks().forEach((track) => track.stop());
+          }
+          preview.innerHTML = "";
+        };
+      });
+
+      // Form submission
+      postForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(postForm);
+        const postData = {
+          id: editingPostId || `post_${postIdCounter++}`,
+          title: formData.get('title'),
+          date: formData.get('date'),
+          category: formData.get('category'),
+          content: formData.get('content'),
+          image: currentImageDataUrl,
+          likes: 0,
+          likedBy: [],
+          timestamp: new Date().toISOString()
+        };
+
+        try {
+          if (editingPostId) {
+            // Update existing post
+            const postIndex = posts.findIndex(p => p.id === editingPostId);
+            if (postIndex !== -1) {
+              posts[postIndex] = { ...posts[postIndex], ...postData };
+              showMessage('Post updated successfully!');
+            }
+          } else {
+            // Add new post
+            posts.unshift(postData);
+            showMessage('Post created successfully!');
+          }
+          
+          resetForm();
+          displayPosts();
+        } catch (error) {
+          console.error('Error saving post:', error);
+          showMessage('Error saving post. Please try again.', 'error');
+        }
+      });
+
+      // Cancel button
+      cancelBtn.addEventListener('click', resetForm);
+
+      // Reset form function
+      function resetForm() {
+        postForm.reset();
+        document.getElementById('basicPreview').innerHTML = '';
+        document.getElementById('basicFile').value = '';
+        document.getElementById('date').valueAsDate = new Date();
+        currentImageDataUrl = null;
+        editingPostId = null;
+        formTitle.textContent = 'Make a Post';
+        submitBtn.textContent = 'Post';
+      }
+
+      // Display posts
+      function displayPosts() {
+        if (posts.length === 0) {
+          postsContainer.innerHTML = '<div class="no-posts">No posts yet. Be the first to share an incident!</div>';
+          return;
+        }
+
+        postsContainer.innerHTML = posts.map(post => `
+          <div class="post-card">
+            <div class="post-header">
+              <div>
+                <div class="post-title">${escapeHtml(post.title)}</div>
+                <div class="post-meta">
+                  <span>${new Date(post.date).toLocaleDateString()}</span>
+                  <span class="post-category">${post.category}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="post-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
+            
+            ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image">` : ''}
+            
+            <div class="post-actions">
+              <div class="like-section">
+                <button class="like-btn ${post.likedBy?.includes('current-user') ? 'liked' : ''}" 
+                        onclick="toggleLike('${post.id}')">
+                  ❤️ <span>${post.likes || 0}</span>
+                </button>
+              </div>
+              
+              <div class="action-buttons">
+                <button class="edit-btn" onclick="editPost('${post.id}')">Edit</button>
+                <button class="delete-btn" onclick="deletePost('${post.id}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Escape HTML to prevent XSS
+      function escapeHtml(text) {
+        const map = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+      }
+
+      // Toggle like function
+      function toggleLike(postId) {
+        const post = posts.find(p => p.id === postId);
+        if (!post) return;
+        
+        const userId = 'current-user';
+        
+        if (!post.likedBy) post.likedBy = [];
+        if (!post.likes) post.likes = 0;
+        
+        if (post.likedBy.includes(userId)) {
+          // Unlike
+          post.likes = Math.max(0, post.likes - 1);
+          post.likedBy = post.likedBy.filter(id => id !== userId);
+        } else {
+          // Like
+          post.likes += 1;
+          post.likedBy.push(userId);
+        }
+        
+        displayPosts();
+      }
+
+      // Edit post function
+      function editPost(postId) {
+        const post = posts.find(p => p.id === postId);
+        if (!post) return;
+        
+        // Populate form with post data
+        document.getElementById('title').value = post.title;
+        document.getElementById('date').value = post.date;
+        document.getElementById('category').value = post.category;
+        document.getElementById('content').value = post.content;
+        
+        if (post.image) {
+          currentImageDataUrl = post.image;
+          const preview = document.getElementById('basicPreview');
+          preview.innerHTML = `
+            <img src="${post.image}" style="max-width: 100%; border-radius: 8px;">
+            <button onclick="document.getElementById('basicPreview').innerHTML = ''; currentImageDataUrl = null;" style="margin-top: 10px; background: #dc3545; color: white; border: none; border-radius: 20px; padding: 6px 16px; cursor: pointer;">Delete</button>
+          `;
+        }
+        
+        editingPostId = postId;
+        formTitle.textContent = 'Edit Post';
+        submitBtn.textContent = 'Update';
+        
+        // Scroll to form
+        document.querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Delete post function
+      function deletePost(postId) {
+        if (!confirm('Are you sure you want to delete this post?')) return;
+        
+        posts = posts.filter(p => p.id !== postId);
+        showMessage('Post deleted successfully!');
+        displayPosts();
+      }
+
+      // Make functions available globally
+      window.handleBasicUpload = handleBasicUpload;
+      window.toggleLike = toggleLike;
+      window.editPost = editPost;
+      window.deletePost = deletePost;
+
+      // Initialize the app
+      displayPosts();
+
+      // Add some demo posts for demonstration
+      setTimeout(() => {
+        if (posts.length === 0) {
+          posts.push({
+            id: 'demo_1',
+            title: 'Traffic Accident on Main Street',
+            date: '2025-06-29',
+            category: 'accident',
+            content: 'Witnessed a minor traffic accident at the intersection of Main Street and Oak Avenue. No injuries reported, but traffic was delayed for about 30 minutes.',
+            image: null,
+            likes: 3,
+            likedBy: ['user1', 'user2', 'user3'],
+            timestamp: new Date().toISOString()
+          });
+          
+          posts.push({
+            id: 'demo_2',
+            title: 'Fire at Local Business',
+            date: '2025-06-28',
+            category: 'fire',
+            content: 'Small fire broke out at the bakery on 5th Street this morning. Fire department responded quickly and contained the fire. Everyone evacuated safely.',
+            image: null,
+            likes: 7,
+            likedBy: ['user1', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9'],
+            timestamp: new Date(Date.now() - 86400000).toISOString()
+          });
+          
+          displayPosts();
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>

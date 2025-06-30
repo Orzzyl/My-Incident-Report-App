@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Report</title>
+    <link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'poppins', sans-serif;
+            background-color: #F5F5F5;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .first-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            height: 70px;
+            color: white;
+            border-radius: 5px;
+            padding: 0 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .app-name {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        #logoutBtn {
+            background-color: #fff;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .welcoming-speech {
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        .welcome{
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        .inspo {
+            font-size: 0.8rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        .example {
+            margin-bottom: 32px;
+        }
+        .pick {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .slide-here {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+        }
+        .cards-container::-webkit-scrollbar { display: none; }
+        .card {
+            min-width: 3rem;
+            height: 2rem;
+            background: black;
+            border-radius: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: grab;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 0 24px;
+        }
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            background: white;
+            color: black;
+        }
+        a{
+            text-decoration: none;
+            font-size: 0.7rem;
+            color: inherit;
+        }
+        a:hover {
+            color: inherit;
+        }
+        .names{
+            min-width: 2rem;
+        }
+    
+
+
+        .report-form-container {
+            padding-top: 50px;
+        }
+        section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            margin: 0 auto 32px auto;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .report-form{
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        section label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        section input[type="text"], section textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+        }
+        section textarea {
+            min-height: 100px;
+            resize: none;
+        }
+        section button, section input[type="file"] {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background-color: black;
+            color: white;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            padding: 10px 10px;
+        }
+        .upload-section{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+        }
+        .takephoto-btn{
+            padding: 10px 10px;
+            background-color: black;
+            color: white;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #555;
+        }
+        .upload-btn:active {
+            transform: translateY(0);
+        }
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .takephoto-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #555;
+        }
+        .takephoto-btn:active {
+            transform: translateY(0);
+        }
+        .takephoto-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+        .click{
+            font-size: 0.8rem;
+        }
+
+        .location-button {
+            background: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px;
+        }
+        .location-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #555;
+        }
+        .location-button:active {
+            transform: translateY(0);
+        }
+        .location-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .location-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+            gap: 20px;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .cancel{
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #submitBtn{
+              border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #555;
+        }
+        .cancel:active {
+            transform: translateY(0);
+        }
+        #submitBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #555;
+        }
+        #submitBtn:active {
+            transform: translateY(0);
+        }
+
+        .nature{
+            font-size: 0.8rem;
+            padding-top: 10px;
+            font-weight: 500;
+        }
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            background: black;
+            color: white;
+            width: 120px;
+        }
+
+        .radio-option:hover {
+            border-color: black;
+            background: white;
+            color: black;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .radio-label {
+            font-weight: 500;
+            font-size: 0.7rem;
+        }
+
+        @media screen and (max-width: 400px) {
+          
+            .welcome {
+                font-size: 1.2rem;
+            }
+            .inspo {
+                font-size: 0.7rem;
+            }
+            .report-form {
+                font-size: 1.5rem;
+            }
+            .click {
+                font-size: 0.7rem;
+            }
+            .radio-group {
+                flex-direction: column;
+            }
+            .radio-option {
+            
+                text-align: center;
+            }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .location-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .location-info h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .info-value {
+            color: #333;
+            word-break: break-all;
+        }
+        .error-message {
+            background: #ffe6e6;
+            color: #d63384;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #d63384;
+        }
+        .success-message {
+            background: #d1edff;
+            color: #0066cc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #0066cc;
+        }
+        .map-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+        .map-link:hover { background: #218838; }
+        .last-updated {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .hidden-input {
+            display: none;
+        }
+        @media screen and (max-width: 768px){
+            .app-name {
+                font-size: 0.8rem;
+            }
+            #logoutBtn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+        }
+   @media screen and (max-width: 400px){
+          .upload-section button{
+            width: 100px;
+            font-size: 0.6rem;
+          }
+          .upload-btn{
+            width: 100px;
+          }
+          .span{
+            display: none;
+          }
+        }
+
+
+    </style>
+</head>
+<body>
+       <div class="first-header">
+        <h1 class="app-name">Incident App</h1>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+    </div>
+    <div class="welcoming-speech">
+        <p class="welcome">Welcome, to your Incident Reporting Portal</p>
+        <p class="inspo">
+            Here, you can report incidents confidentially.<br>
+            This platform makes it simple to share your <br>experience and connect with appropriate support.<br>
+            Your safety and Well-being are our priority
+        </p>
+    </div>
+
+    <div class="example">
+        <p class="pick">Select Incident</p>
+        <p class="slide-here">Slide left to select incident</p>
+        <div class="cards-container" id="cardsContainer">
+            <div class="card"><a href=#incidentForm>Accident</a></div>
+            <div class="card"><a href=#incidentForm>Rioting</a></div>
+            <div class="card"><a href=#incidentForm>Murder</a></div>
+            <div class="card"><a href=#incidentForm>Fighting</a></div>
+            <div class="card"><a href=#incidentForm>Damage</a></div>
+            <div class="card"><a href=#incidentForm>Assault</a></div>
+            <div class="card"><a href=#incidentForm>Kidnapping</a></div>
+            <div class="card names"><a href=#incidentForm>Rape</a></div>
+            <div class="card names"><a href=#incidentForm>Fire</a></div>
+            <div class="card names"><a href=#incidentForm>Fall</a></div>
+            <div class="card"><a href=#incidentForm>Robbery</a></div>
+            <div class="card"><a href=#incidentForm>Suicide</a></div>
+            <div class="card names"><a href=#incidentForm>Arms</a></div>
+            <div class="card"><a href=#incidentForm>Stalking</a></div>
+        </div>
+    </div>
+
+    <div class="report-form-container">
+    <section>
+        <p class="report-form" id="incidentForm">Report</p>
+        <form name="post-container" action="https://send.pageclip.co/fFNHe5unl51JSxT7YLhhiNY7aAOLI2j1/Report-form" class="pageclip-form" method="post">
+            <label for="nameInput">Name</label>
+            <input type="text" id="nameInput" name="name">
+
+            <label for="locationInput">Incident Location</label>
+            <input type="text" id="locationInput" name="location">
+
+            <label for="briefStatement">Brief statement</label>
+            <textarea name="statement" id="briefStatement" placeholder="Enter a brief statement" title="Brief statement"></textarea>
+
+            <p class="click">Click the button below to get your current location</p>
+            <button type="button" id="locationBtn" class="location-button">
+            <svg class="location-icon" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span id="buttonText">Location</span>
+        </button>
+
+            <label for="uploadImages">Upload Images</label>
+
+            <div class="upload-section">
+            <button type="button" class="upload-btn" onclick="document.getElementById('basicFile').click()">
+                Upload <span class="span">Image</span>
+            </button>
+            <input type="file" id="basicFile" class="hidden-input" onchange="handleBasicUpload(event)">
+            
+            <button type="button" id="takePhoto_btn" class="takephoto-btn">Take Photo</button>
+        </div>
+
+        <div id="basicPreview" class="file-preview"></div>
+            
+   
+
+        <p class="nature">Nature of incident</p>
+        <div class="radio-group">
+            <label class="radio-option severe">
+                <input type="radio" name="severity" value="severe" id="severeOption" name="nature">
+                <span class="radio-label">Severe</span>
+            </label>
+            
+            <label class="radio-option not-severe">
+                <input type="radio" name="name" value="not-severe" id="notSevereOption" checked>
+                <span class="radio-label">Not Severe</span>
+            </label>
+        </div>
+
+        <div class="button-container">
+            <button type="reset" class="cancel">Cancel</button>
+            <button type="submit" class="pageclip-form__submit" id="submitBtn"><span>Submit</span></button>
+        </div>
+    </div>
+     </form>
+</section>
+
+<div id="submit-result-container">
+    <div class="report-result-container">
+     
+    </div>
+    
+
+</div>
+        
+    
+    
+    <script>
+    //log out functionality
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+        // Card drag-to-scroll
+        (function() {
+            const cardsContainer = document.getElementById('cardsContainer');
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            cardsContainer.addEventListener('mousedown', function(e) {
+                isDown = true;
+                startX = e.pageX - cardsContainer.offsetLeft;
+                scrollLeft = cardsContainer.scrollLeft;
+            });
+            cardsContainer.addEventListener('mouseleave', function() { isDown = false; });
+            cardsContainer.addEventListener('mouseup', function() { isDown = false; });
+            cardsContainer.addEventListener('mousemove', function(e) {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - cardsContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                cardsContainer.scrollLeft = scrollLeft - walk;
+            });
+        })();
+
+    
+    // Image upload and preview
+        function handleBasicUpload(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('basicPreview');
+            preview.innerHTML = ''; // Clear previous previews
+
+            if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '8px';
+
+                // Create delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.style.marginTop = '10px';
+                deleteBtn.style.background = 'black';
+                deleteBtn.style.color = 'white';
+                deleteBtn.style.border = 'none';
+                deleteBtn.style.borderRadius = '20px';
+                deleteBtn.style.padding = '6px 16px';
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.onclick = function() {
+                preview.innerHTML = '';
+                // Also clear the file input value
+                document.getElementById('basicFile').value = '';
+                };
+
+                preview.appendChild(img);
+                preview.appendChild(deleteBtn);
+            };
+            reader.readAsDataURL(file);
+            } else {
+            preview.textContent = 'No image selected';
+            }
+        }
+        // Take Photo functionality
+        document.getElementById('takePhoto_btn').addEventListener('click', async function() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Camera access is not supported in this browser.');
+                return;
+            }
+            // Create video element for preview
+            const video = document.createElement('video');
+            video.autoplay = true;
+            video.style.width = '100%';
+            video.style.borderRadius = '8px';
+            const preview = document.getElementById('basicPreview');
+            preview.innerHTML = '';
+            preview.appendChild(video);
+
+            // Create capture button
+            const captureBtn = document.createElement('button');
+            captureBtn.textContent = 'Capture';
+            captureBtn.style.marginTop = '10px';
+            captureBtn.style.background = 'black';
+            captureBtn.style.color = 'white';
+            captureBtn.style.border = 'none';
+            captureBtn.style.borderRadius = '20px';
+            captureBtn.style.padding = '6px 16px';
+            captureBtn.style.cursor = 'pointer';
+
+            preview.appendChild(captureBtn);
+
+            let stream = null;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+            } catch (err) {
+                preview.innerHTML = '';
+                alert('Could not access the camera.');
+                return;
+            }
+
+            captureBtn.onclick = function() {
+                // Create canvas to capture frame
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Stop video stream
+                stream.getTracks().forEach(track => track.stop());
+
+                // Show captured image
+                const img = document.createElement('img');
+                img.src = canvas.toDataURL('image/png');
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '8px';
+
+                // Create delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.style.marginTop = '10px';
+                deleteBtn.style.background = 'black';
+                deleteBtn.style.color = 'white';
+                deleteBtn.style.border = 'none';
+                deleteBtn.style.borderRadius = '20px';
+                deleteBtn.style.padding = '6px 16px';
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.onclick = function() {
+                    preview.innerHTML = '';
+                };
+
+                preview.innerHTML = '';
+                preview.appendChild(img);
+                preview.appendChild(deleteBtn);
+            };
+        });
+    </script>
+    <script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
+</body>
+</html>
