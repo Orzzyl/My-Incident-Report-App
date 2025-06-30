@@ -218,13 +218,16 @@
           position: absolute;
           width: 153px;
         }
-        body {
-          background-image: url("login-background.jpg");
-        }
         .input-submit:hover {
           background: white;
           box-shadow: 0px 4px 20px rgba(62, 9, 9, 0.32);
           color: #000;
+        }
+        .forgot{
+          color: white;
+        }
+        .forgot a{
+          color: white;
         }
       }
     </style>
@@ -273,7 +276,7 @@
               </button>
             </div>
             <div class="forgot">
-              <a href="" id="reset-password">Forgot Password</a>
+              <a href="" id="reset-password" class="forgot-1">Forgot Password</a>
               <p class="account">
                 Don't have an account?
                 <a class="register" onclick="register()">Register</a>
